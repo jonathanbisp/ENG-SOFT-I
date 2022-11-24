@@ -53,4 +53,13 @@ public abstract class User {
     public void reserve(Book book) {
         this.reserveBehavior.reserve(this, book);
     }
+    
+    public static User getById(int id) {
+    	for(User u:users) {
+    		if(u.cod == id){
+    			return u;
+    		}
+    	}
+		return null;
+    }
 }

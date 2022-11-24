@@ -1,6 +1,14 @@
+import java.util.ArrayList;
 
+import books.Book;
+import users.Professor;
+import users.User;
 
 public class Biblioteca {
+	
+	public ArrayList<User> usuarios;
+	
+	public ArrayList<Book> livros;
 	
 	private Biblioteca() {};
 	
@@ -12,5 +20,43 @@ public class Biblioteca {
 		}
 		return instance;
 	}
+	
+	
+	public void inicializarLivros() {
+        Book livro = new Book(100, "Engenharia de Software", "AddisonWesley",
+                "Ian Sommervile", "6ª", "2000", 2);
+        livros.add(livro);
+	}
+	
+	public void inicializarUsuarios() {
+        User professor = new Professor(100, "Carlos Lucena");
+        usuarios.add(professor);
+	}
+	
 
-}
+	public void reservar(int codUsuario, int codLivro) {
+		for(User u : usuarios) {
+			if(u.getCod() == codUsuario) {
+				u.addReservedBook(Book.getById(codLivro));
+			}
+		}
+	}
+	
+	public void emprestar(int codUsuario, int  codLivro) {
+		for(Book b : livros) {
+		
+		}
+		
+	}
+	public void devolver(int codUsuario, int  codLivro) {
+		
+		}
+	
+	public void findByBook(int  codLivro) {
+		Book.getById(codLivro).printBookInfo();
+	}
+	
+	public void findByUser(int codUsuario) {
+	}
+	}
+

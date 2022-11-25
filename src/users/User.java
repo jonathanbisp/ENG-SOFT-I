@@ -1,9 +1,11 @@
 package users;
 
 import books.Book;
+import books.Exemplar;
 import users.behaviors.BorrowBehavior;
 import users.behaviors.ReserveBehavior;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public abstract class User {
@@ -15,7 +17,7 @@ public abstract class User {
     int cod;
     String name;
 
-    ArrayList<Book> borrowedBooks;
+    ArrayList<Exemplar> borrowedBooks;
     ArrayList<Book> reservedBooks;
 
     User() {
@@ -24,6 +26,10 @@ public abstract class User {
 
     public void addReservedBook(Book book) {
         this.reservedBooks.add(book);
+    }
+    
+    public void addBorrowedBook(Exemplar book) {
+        this.borrowedBooks.add(book);
     }
 
     public void removeReservedBook(Book book) {
@@ -34,6 +40,10 @@ public abstract class User {
         return this.reservedBooks.contains(book);
     }
 
+    public int amountBorrowedBooks() {
+        return this.borrowedBooks.size();
+    }
+    
     public int amountReservedBook() {
         return this.reservedBooks.size();
     }
@@ -62,4 +72,27 @@ public abstract class User {
     	}
 		return null;
     }
+    
+    public boolean isDevedor() {
+    	for(Exemplar e : borrowedBooks) {
+    		if(LocalDate.now().isAfter(e.getDataDevolucao())){
+    			return true;
+    		} 
+    	}return false;
+    }
+    
+    public ArrayList<Exemplar> getBorrowedBooks() {
+		return borrowedBooks;
+	}
+    
+    public void devolver(Book book) {
+    	for(Exemplar e :borrowedBooks ) {
+    		if(book.getBorrowedExemplars().contains(e)) {
+    			book.getBorrowedExemplars().remove(e);
+    			book.setUnborrowedExemplars(e);
+    		}
+    		
+	 
+ }}
+    
 }

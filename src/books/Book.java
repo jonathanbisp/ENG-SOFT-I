@@ -11,6 +11,7 @@ public class Book {
     private int cod;
     private String title;
 
+
     // private String editor;
     // private String authors;
     // private String edition;
@@ -91,4 +92,42 @@ public class Book {
             book.printBookInfo();
         }
     }
+    
+    public ArrayList<Exemplar> getBorrowedExemplars() {
+		return borrowedExemplars;
+	}
+    
+    public ArrayList<Exemplar> getUnborrowedExemplars() {
+		return unborrowedExemplars;
+	}
+    
+    public void setBorrowedExemplars(Exemplar exemplar) {
+		this.borrowedExemplars.add(exemplar) ;
+	}
+    
+    public void setUnborrowedExemplars(Exemplar exemplar) {
+		this.unborrowedExemplars.add(exemplar);
+	}
+    
+    public void removeFromUnborrowedExemplars(Exemplar exemplar) {
+		this.unborrowedExemplars.remove(exemplar);
+	}
+    
+    public void removeFromBorrowedExemplars(Exemplar exemplar) {
+		this.borrowedExemplars.remove(exemplar);
+	}
+    
+    public ArrayList<User> getReserves() {
+		return reserves;
+	}
+    
+    public boolean isBorrowed(User u) {
+    	for(Exemplar e : borrowedExemplars) {
+    		if(e.getBorrowerCod() == u.getCod()) {
+    			return true;
+    		}
+    	}return false;
+    }
+    
+    
 }

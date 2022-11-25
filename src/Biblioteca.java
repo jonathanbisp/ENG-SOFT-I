@@ -37,23 +37,29 @@ public class Biblioteca {
 	public void reservar(int codUsuario, int codLivro) {
 		for(User u : usuarios) {
 			if(u.getCod() == codUsuario) {
-				u.addReservedBook(Book.getById(codLivro));
+				u.reserve(Book.getById(codLivro));
 			}
 		}
 	}
 	
 	public void emprestar(int codUsuario, int  codLivro) {
-		for(Book b : livros) {
-		
+		for(User u : usuarios) {
+			if(u.getCod() == codUsuario) {
+				u.borrow(Book.getById(codLivro));
+			}
 		}
 		
 	}
 	public void devolver(int codUsuario, int  codLivro) {
-		
+		for(User u : usuarios) {
+			if(u.getCod() == codUsuario) {
+				u.devolver(Book.getById(codLivro));
+			}
 		}
+	}
 	
 	public void findByBook(int  codLivro) {
-		Book.getById(codLivro).printBookInfo();
+		Book.printInfosById(codLivro);
 	}
 	
 	public void findByUser(int codUsuario) {

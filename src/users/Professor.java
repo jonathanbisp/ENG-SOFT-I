@@ -2,8 +2,8 @@ package users;
 
 import users.behaviors.BorrowProfessor;
 import users.behaviors.ReserveMaxThree;
-import books.Book;
-import books.Exemplar;
+import actions.Borrow;
+import actions.Reserve;
 
 import java.util.ArrayList;
 
@@ -15,10 +15,8 @@ public class Professor extends User {
         this.cod = cod;
         this.name = name;
 
-        this.borrowedBooks = new ArrayList<Exemplar>();
-        this.reservedBooks = new ArrayList<Book>();
-
-        users.add(this);
+        this.borrows = new ArrayList<Borrow>();
+        this.reserves = new ArrayList<Reserve>();
     }
 
 }

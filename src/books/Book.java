@@ -3,21 +3,20 @@ package books;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+import actions.Reserve;
 import users.User;
 
 public class Book {
-    public static ArrayList<Book> books = new ArrayList<Book>();
 
     private int cod;
     private String title;
-
 
     // private String editor;
     // private String authors;
     // private String edition;
     // private String releaseYear;
 
-    private ArrayList<User> reserves;
+    private ArrayList<Reserve> reserves;
 
     private ArrayList<Exemplar> unborrowedExemplars;
 
@@ -32,27 +31,21 @@ public class Book {
         // this.edition = edition;
         // this.releaseYear = releaseYear;
 
-        this.reserves = new ArrayList<User>();
+        this.reserves = new ArrayList<Reserve>();
 
         this.unborrowedExemplars = new ArrayList<Exemplar>();
         IntStream.range(1, amountExemplars + 1).forEach(
-                exemplarCod -> this.unborrowedExemplars.add(new Exemplar(exemplarCod)));
+                exemplarCod -> this.unborrowedExemplars.add(new Exemplar(exemplarCod, this)));
 
         this.borrowedExemplars = new ArrayList<Exemplar>();
-
-        books.add(this);
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void AddReserve(User user) {
-        this.reserves.add(user);
-    }
-
-    public void removeReserve(User user) {
-        this.reserves.remove(user);
+    public void addReserve(Reserve reserve) {
+        this.reserves.add(reserve);
     }
 
     public void printBookInfo() {
@@ -61,8 +54,8 @@ public class Book {
         System.out.println("Quantidade de reservas: " + this.reserves.size());
         if (this.reserves.size() > 0) {
             System.out.println("Reservado por:");
-            for (User reserve : this.reserves) {
-                System.out.println("   " + reserve.getName());
+            for (Reserve reserve : this.reserves) {
+                System.out.println("   " + reserve.getUser().getName());
             }
         }
         System.out.println("Exemplares:");
@@ -75,59 +68,46 @@ public class Book {
 
     }
 
-    public static Book getById(int cod) {
-        for (Book book : books) {
-            if (book.cod == cod) {
-                return book;
-            }
-        }
-        return null;
+    public int getCod() {
+        return cod;
     }
 
-    public static void printInfosById(int cod) {
-        Book book = Book.getById(cod);
-        if (book == null) {
-            System.out.println("Livro não cadastrado.");
+    public boolean isAbleToBorrow() {
+        if (this.unborrowedExemplars.size() > 0) {
+            return true;
         } else {
-            book.printBookInfo();
+            System.out.println("FALHA AO EMPRESTAR O LIVRO: " + this.getTitle() +
+                    "POIS NÃO HÁ LIVROS DISPONIVEIS");
+            return false;
         }
     }
-    
-    public ArrayList<Exemplar> getBorrowedExemplars() {
-		return borrowedExemplars;
-	}
-    
-    public ArrayList<Exemplar> getUnborrowedExemplars() {
-		return unborrowedExemplars;
-	}
-    
-    public void setBorrowedExemplars(Exemplar exemplar) {
-		this.borrowedExemplars.add(exemplar) ;
-	}
-    
-    public void setUnborrowedExemplars(Exemplar exemplar) {
-		this.unborrowedExemplars.add(exemplar);
-	}
-    
-    public void removeFromUnborrowedExemplars(Exemplar exemplar) {
-		this.unborrowedExemplars.remove(exemplar);
-	}
-    
-    public void removeFromBorrowedExemplars(Exemplar exemplar) {
-		this.borrowedExemplars.remove(exemplar);
-	}
-    
-    public ArrayList<User> getReserves() {
-		return reserves;
-	}
-    
-    public boolean isBorrowed(User u) {
-    	for(Exemplar e : borrowedExemplars) {
-    		if(e.getBorrowerCod() == u.getCod()) {
-    			return true;
-    		}
-    	}return false;
+
+    public Exemplar getExemplarToBorrow() {
+        Exemplar exemplar = this.unborrowedExemplars.get(0);
+        this.unborrowedExemplars.remove(exemplar);
+        this.borrowedExemplars.add(exemplar);
+        return exemplar;
     }
-    
-    
+
+    public ArrayList<Exemplar> getUnborrowedExemplars() {
+        return unborrowedExemplars;
+    }
+
+    public void removeFromBorrowedExemplars(Exemplar exemplar) {
+        this.borrowedExemplars.remove(exemplar);
+    }
+
+    public ArrayList<Reserve> getReserves() {
+        return reserves;
+    }
+
+    public boolean isBorrowed(User u) {
+        for (Exemplar e : borrowedExemplars) {
+            if (e.getBorrowerCod() == u.getCod()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

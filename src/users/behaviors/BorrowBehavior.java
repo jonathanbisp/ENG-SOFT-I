@@ -5,8 +5,6 @@ import users.User;
 
 public interface BorrowBehavior {
 
-    public void borrow(User user, Book book);
+    public boolean isAbleToBorrow(User user, Book book);
 
-
-    
 }

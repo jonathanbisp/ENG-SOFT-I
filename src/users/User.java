@@ -1,51 +1,43 @@
 package users;
 
 import books.Book;
-import books.Exemplar;
 import users.behaviors.BorrowBehavior;
 import users.behaviors.ReserveBehavior;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class User {
-    public static ArrayList<User> users = new ArrayList<User>();
+import actions.Borrow;
+import actions.Reserve;
 
+public abstract class User {
     BorrowBehavior borrowBehavior;
     ReserveBehavior reserveBehavior;
 
     int cod;
     String name;
+    int limitBorrowDays;
 
-    ArrayList<Exemplar> borrowedBooks;
-    ArrayList<Book> reservedBooks;
+    ArrayList<Borrow> borrows;
+    ArrayList<Reserve> reserves;
 
     User() {
 
     }
 
-    public void addReservedBook(Book book) {
-        this.reservedBooks.add(book);
-    }
-    
-    public void addBorrowedBook(Exemplar book) {
-        this.borrowedBooks.add(book);
+    public int amountActiveBorrowedBooks() {
+        int amountActiveBorrows = 0;
+
+        for (Borrow borrow : this.borrows) {
+            if (!borrow.isActive()) {
+                amountActiveBorrows += 1;
+            }
+        }
+        return amountActiveBorrows;
     }
 
-    public void removeReservedBook(Book book) {
-        this.reservedBooks.remove(book);
-    }
-
-    public Boolean isReserverdBook(Book book) {
-        return this.reservedBooks.contains(book);
-    }
-
-    public int amountBorrowedBooks() {
-        return this.borrowedBooks.size();
-    }
-    
-    public int amountReservedBook() {
-        return this.reservedBooks.size();
+    public int getLimitBorrowDays() {
+        return limitBorrowDays;
     }
 
     public int getCod() {
@@ -56,43 +48,61 @@ public abstract class User {
         return this.name;
     }
 
-    public void borrow(Book book) {
-        this.borrowBehavior.borrow(this, book);
+    public boolean isAbleToBorrow(Book book) {
+        return this.borrowBehavior.isAbleToBorrow(this, book);
     }
 
-    public void reserve(Book book) {
-        this.reserveBehavior.reserve(this, book);
+    public boolean isAbleToReserve() {
+        return this.reserveBehavior.isAbleToReserve(this);
     }
-    
-    public static User getById(int id) {
-    	for(User u:users) {
-    		if(u.cod == id){
-    			return u;
-    		}
-    	}
-		return null;
+
+    public boolean isDebtor() {
+        for (Borrow borrow : this.borrows) {
+            if (!borrow.isActive()) {
+                if (LocalDate.now().isAfter(borrow.getExpectedReturnDate())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-    
-    public boolean isDevedor() {
-    	for(Exemplar e : borrowedBooks) {
-    		if(LocalDate.now().isAfter(e.getDataDevolucao())){
-    			return true;
-    		} 
-    	}return false;
+
+    public boolean isActiveBorrowedBook(Book book) {
+        for (Borrow borrow : this.borrows) {
+            if ((borrow.isActive()) && (borrow.getExemplar().getBook() == book)) {
+                return true;
+            }
+        }
+        return false;
     }
-    
-    public ArrayList<Exemplar> getBorrowedBooks() {
-		return borrowedBooks;
-	}
-    
-    public void devolver(Book book) {
-    	for(Exemplar e :borrowedBooks ) {
-    		if(book.getBorrowedExemplars().contains(e)) {
-    			book.getBorrowedExemplars().remove(e);
-    			book.setUnborrowedExemplars(e);
-    		}
-    		
-	 
- }}
-    
+
+    public boolean isActiveReservedBook(Book book) {
+        for (Reserve reserve : this.reserves) {
+            if ((reserve.isActive()) && (reserve.getBook() == book)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addBorrow(Borrow borrow) {
+        this.borrows.add(borrow);
+    }
+
+    public int amountReservedBook() {
+        return this.reserves.size();
+    }
+
+    public void addReserve(Reserve reserve) {
+        this.reserves.add(reserve);
+    }
+
+    public Reserve getReserveByBook(Book book) {
+        for (Reserve reserve : this.reserves) {
+            if ((reserve.isActive()) && (reserve.getBook() == book)) {
+                return reserve;
+            }
+        }
+        return null;
+    }
 }

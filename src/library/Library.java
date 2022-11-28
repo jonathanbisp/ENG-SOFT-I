@@ -13,6 +13,9 @@ import users.StudentPosGrad;
 import actions.Borrow;
 import actions.Reserve;
 
+import observer.Observer;
+import observer.Subject;
+
 public class Library {
 
 	private ArrayList<User> users;
@@ -128,7 +131,10 @@ public class Library {
 		if (user.isAbleToReserve()) {
 			new Reserve(user, book);
 		}
-
+		
+		if(book.getAmountReserves()>=2 ) {
+			book.notifyObservers();
+		}
 	}
 
 	public void borrow(int codUser, int codBook) {
@@ -182,5 +188,41 @@ public class Library {
 		System.out.println(
 				"SUCESSO AO DEVOLVER O LIVRO: " + book.getTitle()
 						+ "DE: " + user.getName());
+	}
+	
+	public void register(int codUser, int codBook) {
+		User user = this.getUserByCod(codUser);
+		if (user == null) {
+			System.out.println("USUARIO NAO CADASTRADO");
+			return;
+		}
+		
+		Book book = this.getBookByCod(codBook);
+		if (book == null) {
+			System.out.println("LIVRO NAO CADASTRADO");
+			return;
+		}
+		
+		book.registerObserver((Professor) user);	
+	}
+	
+	public void notify(int codUser) {
+		User user = this.getUserByCod(codUser);
+		if (user == null) {
+			System.out.println("USUARIO NAO CADASTRADO");
+			return;
+		}
+		
+		user.getNotifications();		
+	}
+	
+	public void printUserInfos(int codUser) {
+		User user = this.getUserByCod(codUser);
+		if (user == null) {
+			System.out.println("USUARIO NAO CADASTRADO");
+			return;
+		}
+		
+		user.printUserInfo();
 	}
 }

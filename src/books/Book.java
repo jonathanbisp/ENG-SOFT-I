@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 import actions.Reserve;
+import observer.Observer;
+import observer.Subject;
 import users.User;
 
-public class Book {
+public class Book implements Subject{
 
     private int cod;
     private String title;
@@ -15,6 +17,8 @@ public class Book {
     private String edition;
     private String releaseYear;
 
+    private ArrayList<Observer> observers;
+    
     private ArrayList<Reserve> reserves;
 
     private ArrayList<Exemplar> unborrowedExemplars;
@@ -37,6 +41,9 @@ public class Book {
                 exemplarCod -> this.unborrowedExemplars.add(new Exemplar(exemplarCod, this)));
 
         this.borrowedExemplars = new ArrayList<Exemplar>();
+        
+		this.observers = new ArrayList<Observer>();
+
     }
 
     public String getTitle() {
@@ -123,5 +130,27 @@ public class Book {
         }
         return false;
     }
+
+	@Override
+	public void registerObserver(Observer o) {
+		observers.add(o);
+		
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		int i = observers.indexOf(o);
+		if (i >= 0) {
+			observers.remove(i);
+		}
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (int i = 0; i < observers.size(); i++) {
+			Observer observer = observers.get(i);
+			observer.update(this);
+		}
+	}
 
 }

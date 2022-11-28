@@ -29,7 +29,7 @@ public abstract class User {
         int amountActiveBorrows = 0;
 
         for (Borrow borrow : this.borrows) {
-            if (!borrow.isActive()) {
+            if (borrow.isActive()) {
                 amountActiveBorrows += 1;
             }
         }
@@ -101,6 +101,15 @@ public abstract class User {
         for (Reserve reserve : this.reserves) {
             if ((reserve.isActive()) && (reserve.getBook() == book)) {
                 return reserve;
+            }
+        }
+        return null;
+    }
+
+    public Borrow getBorrowByBook(Book book) {
+        for (Borrow borrow : this.borrows) {
+            if ((borrow.isActive()) && borrow.getExemplar().getBook() == book) {
+                return borrow;
             }
         }
         return null;

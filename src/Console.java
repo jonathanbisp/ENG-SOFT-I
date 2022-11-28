@@ -1,32 +1,39 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import comands.Comand;
-import comands.DevolverComand;
-import comands.EmprestarComand;
-import comands.LivroComand;
-import comands.NtfComand;
-import comands.ObservarComand;
-import comands.ReservarComand;
-import comands.SairComand;
-import comands.UsuarioComand;
+import commands.Command;
+import commands.GiveBackCommand;
+import commands.BorrowCommand;
+import commands.BookCommand;
+import commands.NotifyCommand;
+import commands.ObserveComand;
+import commands.ReserveCommand;
+import commands.ExitCommand;
+import commands.UserCommand;
 
 public class Console {
 
-	public HashMap<String, Comand> comandos;
+	public HashMap<String, Command> commands = new HashMap<String, Command>();
 
-	public void inicializarComandos() {
-		comandos.put("dev", new DevolverComand());
-		comandos.put("emp", new EmprestarComand());
-		comandos.put("liv", new LivroComand());
-		comandos.put("ntf", new NtfComand());
-		comandos.put("obs", new ObservarComand());
-		comandos.put("res", new ReservarComand());
-		comandos.put("sai", new SairComand());
-		comandos.put("usu", new UsuarioComand());
+	public Console() {
+		this.initCommands();
 	}
 
-	public static void main(String[] args) {
+	public void initCommands() {
 
+		commands.put("dev", new GiveBackCommand());
+		commands.put("emp", new BorrowCommand());
+		commands.put("liv", new BookCommand());
+		commands.put("ntf", new NotifyCommand());
+		commands.put("obs", new ObserveComand());
+		commands.put("res", new ReserveCommand());
+		commands.put("sai", new ExitCommand());
+		commands.put("usu", new UserCommand());
+	}
+
+	public void service(String cmd, ArrayList<String> data) {
+		Command command = commands.get(cmd);
+		command.execute(data);
 	}
 
 }

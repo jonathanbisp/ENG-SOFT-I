@@ -1,6 +1,6 @@
 package users;
 
-import users.behaviors.BorrowProfessor;
+import users.behaviors.BorrowStudentPosGrad;
 import users.behaviors.ReserveMaxThree;
 import actions.Borrow;
 import actions.Reserve;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class StudentPosGrad extends User {
     public StudentPosGrad(int cod, String name) {
-        this.borrowBehavior = new BorrowProfessor();
+        this.borrowBehavior = new BorrowStudentPosGrad();
         this.reserveBehavior = new ReserveMaxThree();
 
         this.cod = cod;

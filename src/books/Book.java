@@ -10,11 +10,10 @@ public class Book {
 
     private int cod;
     private String title;
-
-    // private String editor;
-    // private String authors;
-    // private String edition;
-    // private String releaseYear;
+    private String editor;
+    private String authors;
+    private String edition;
+    private String releaseYear;
 
     private ArrayList<Reserve> reserves;
 
@@ -26,10 +25,10 @@ public class Book {
             int amountExemplars) {
         this.cod = cod;
         this.title = title;
-        // this.editor = editor;
-        // this.authors = authors;
-        // this.edition = edition;
-        // this.releaseYear = releaseYear;
+        this.editor = editor;
+        this.authors = authors;
+        this.edition = edition;
+        this.releaseYear = releaseYear;
 
         this.reserves = new ArrayList<Reserve>();
 
@@ -48,13 +47,25 @@ public class Book {
         this.reserves.add(reserve);
     }
 
+    private ArrayList<Reserve> getActiveReserves() {
+        ArrayList<Reserve> activeReserves = new ArrayList<Reserve>();
+        for (Reserve reserve : this.reserves) {
+            if (reserve.isActive()) {
+                activeReserves.add(reserve);
+            }
+        }
+        return activeReserves;
+    }
+
     public void printBookInfo() {
+        ArrayList<Reserve> activeReserves = this.getActiveReserves();
+
         System.out.println("----------------------------------------");
         System.out.println("Titulo: " + this.title);
-        System.out.println("Quantidade de reservas: " + this.reserves.size());
-        if (this.reserves.size() > 0) {
+        System.out.println("Quantidade de reservas: " + activeReserves.size());
+        if (activeReserves.size() > 0) {
             System.out.println("Reservado por:");
-            for (Reserve reserve : this.reserves) {
+            for (Reserve reserve : activeReserves) {
                 System.out.println("   " + reserve.getUser().getName());
             }
         }
@@ -63,7 +74,9 @@ public class Book {
             System.out.println("   " + exemplar.getCod() + " - Disponivel");
         }
         for (Exemplar exemplar : this.borrowedExemplars) {
-            System.out.println("   " + exemplar.getCod() + " - Indsponivel - " + exemplar.getBorrowerName());
+            System.out.println("   " + exemplar.getCod() + " - Indisponivel - " +
+                    exemplar.getBorrowerName() + " - " + exemplar.getBorrowDate() + " - " +
+                    exemplar.getBorrowExpectedReturnDate());
         }
 
     }
@@ -89,16 +102,17 @@ public class Book {
         return exemplar;
     }
 
-    public ArrayList<Exemplar> getUnborrowedExemplars() {
-        return unborrowedExemplars;
-    }
-
-    public void removeFromBorrowedExemplars(Exemplar exemplar) {
+    public void giveBackExemplar(Exemplar exemplar) {
         this.borrowedExemplars.remove(exemplar);
+        this.unborrowedExemplars.add(exemplar);
     }
 
-    public ArrayList<Reserve> getReserves() {
-        return reserves;
+    public int getAmountUnborrowedExemplars() {
+        return this.unborrowedExemplars.size();
+    }
+
+    public int getAmountReserves() {
+        return reserves.size();
     }
 
     public boolean isBorrowed(User u) {

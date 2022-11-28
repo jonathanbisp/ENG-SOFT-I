@@ -23,10 +23,6 @@ public class Borrow {
         exemplar.setBorrow(this);
     }
 
-    public void setReturnDate() {
-        this.returnDate = LocalDate.now();
-    }
-
     public Boolean isActive() {
         if (this.returnDate == null) {
             return true;
@@ -52,6 +48,10 @@ public class Borrow {
 
     public LocalDate getExpectedReturnDate() {
         return expectedReturnDate;
+    }
+
+    public void finish() {
+        this.returnDate = LocalDate.now();
     }
 
 }

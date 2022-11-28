@@ -29,7 +29,7 @@ public class BorrowStudentGrad implements BorrowBehavior {
 			return false;
 		}
 
-		if ((book.getReserves().size() >= book.getUnborrowedExemplars().size())
+		if ((book.getAmountReserves() >= book.getAmountUnborrowedExemplars())
 				&& (!user.isActiveReservedBook(book))) {
 			System.out.println("FALHA AO EMPRESTAR AO USUARIO: "
 					+ user.getName() +

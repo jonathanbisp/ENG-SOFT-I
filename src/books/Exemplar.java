@@ -1,5 +1,7 @@
 package books;
 
+import java.time.format.DateTimeFormatter;
+
 import actions.Borrow;
 
 public class Exemplar {
@@ -30,5 +32,13 @@ public class Exemplar {
 
 	public int getBorrowerCod() {
 		return this.borrow.getUser().getCod();
+	}
+
+	public String getBorrowDate() {
+		return this.borrow.getBorrowDate().toString();
+	}
+
+	public String getBorrowExpectedReturnDate() {
+		return this.borrow.getExpectedReturnDate().toString();
 	}
 }

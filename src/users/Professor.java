@@ -1,13 +1,13 @@
 package users;
 
-import users.behaviors.BorrowProfessor;
-import users.behaviors.ReserveMaxThree;
+import java.util.ArrayList;
+
 import actions.Borrow;
 import actions.Reserve;
 import books.Book;
-
-import java.util.ArrayList;
-import observer.Observer;
+import users.behaviors.BorrowProfessor;
+import users.behaviors.ReserveMaxThree;
+import users.observer.Observer;
 
 public class Professor extends User implements Observer{
 	

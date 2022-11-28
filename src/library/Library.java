@@ -2,19 +2,14 @@ package library;
 
 import java.util.ArrayList;
 
+import actions.Borrow;
+import actions.Reserve;
 import books.Book;
 import books.Exemplar;
-
-import users.User;
 import users.Professor;
 import users.StudentGrad;
 import users.StudentPosGrad;
-
-import actions.Borrow;
-import actions.Reserve;
-
-import observer.Observer;
-import observer.Subject;
+import users.User;
 
 public class Library {
 
@@ -176,7 +171,7 @@ public class Library {
 
 		Borrow borrow = user.getBorrowByBook(book);
 		if (borrow == null) {
-			System.out.println("NÃO EXISTE EMPRESTIMO DESTE LIVRO PRA ESTE USUARIO");
+			System.out.println("NAO EXISTE EMPRESTIMO DESTE LIVRO PRA ESTE USUARIO");
 			return;
 		}
 

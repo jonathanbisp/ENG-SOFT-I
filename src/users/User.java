@@ -116,7 +116,7 @@ public abstract class User {
 		return null;
 	}
 
-	public int getNotifications() {
+    public int getNotifications() {
 		return notifications;
 	}
 
@@ -129,11 +129,13 @@ public abstract class User {
 				System.out.println("   " + borrow.getBorrowDate());
 				if (borrow.getReturnDate() == null) {
 					System.out.println("   " + borrow.getExpectedReturnDate());
-				} else System.out.println("   " + borrow.getReturnDate());
-				if(borrow.isActive()) {
+				} else
+					System.out.println("   " + borrow.getReturnDate());
+				if (borrow.isActive()) {
 					System.out.println("   " + "Em Curso");
-				}else System.out.println("   " + "Finalizado");
-				
+				} else
+					System.out.println("   " + "Finalizado");
+
 			}
 			if (this.reserves.size() > 0) {
 				System.out.println("Reservas:");

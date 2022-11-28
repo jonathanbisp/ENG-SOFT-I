@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 import actions.Reserve;
-import observer.Observer;
-import observer.Subject;
 import users.User;
+import users.observer.Observer;
+import users.observer.Subject;
 
 public class Book implements Subject{
 
